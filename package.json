@@ -1,7 +1,7 @@
 {
   "name": "image-word-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "A website that generates an AI image based on user text input",
   "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,6 +14,14 @@
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^5.2.1",
-    "openai": "^6.33.0"
-  }
+    "openai": "^6.34.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IsidoraSkrlin/image-generation-website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/IsidoraSkrlin/image-generation-website/issues"
+  },
+  "homepage": "https://github.com/IsidoraSkrlin/image-generation-website#readme"
 }

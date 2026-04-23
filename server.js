@@ -19,18 +19,19 @@ app.post("/generate", async (req, res) => {
 
   // Get prompt from request body
   const { prompt } = req.body;
+  const cleanPrompt = prompt?.trim();
 
-  if (!prompt || !prompt.trim()) {
+  if (!cleanPrompt) {
     return res.status(400).json({ error: "No prompt provided" });
   }
 
   let imageUrl;
   
   try {
-    // Generate an image using the prompt
+    // Try generating an AI image using the prompt
     const result = await openai.images.generate({
       model: "gpt-image-1",
-      prompt: prompt,
+      prompt: cleanPrompt,
       size: "1024x1024"
     });
 
@@ -39,20 +40,36 @@ app.post("/generate", async (req, res) => {
     }
 
     imageUrl = result.data[0].url;
+    
   } catch (err) {
-    console.error("Error generating image:", err);
+    console.error("Error generating image:", err.code || err.message);
+    
+    if (err.code === "billing_hard_limit_reached" || 
+      err.message?.includes("Billing hard limit")) {
+      const safePrompt = encodeURIComponent(cleanPrompt);
+      imageUrl = `https://placeimg.dev/400x300/4F46E5/FFFFFF?text=${safePrompt}`;
+
+      console.log("Using fallback image:", imageUrl);
+
+      return res.json({ 
+        image: imageUrl,
+        fallback: true
+      });
+    }
+    
     return res.status(500).json({ error: "Failed to generate image" });
   }
   
   if (!imageUrl) {
     return res.status(500).json({ error: "No image generated" });
   }
-  console.log("Generated image for prompt:", prompt);
+  console.log("Generated image for prompt:", cleanPrompt);
 
   // Send the image URL back to the frontend
   res.json({
     image: imageUrl,
-    prompt: prompt
+    prompt: cleanPrompt,
+    fallback: false
   });
 });
 
