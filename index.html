@@ -10,11 +10,12 @@
 
   <h1>Image Generator</h1>
 
-  <input id="prompt" placeholder="Enter your prompt to generate an image!" />
+  <input id="prompt" style="width: 800px; height: 300px; text-align: center;" placeholder="Enter your prompt here!" />
   <button onclick="generate()">Generate</button>
 
   <br><br>
 
+  <div id="spinner" class="spinner" style="display: none;"></div>
   <img id="result" width="300" />
 
   <script src="script.js"></script>
